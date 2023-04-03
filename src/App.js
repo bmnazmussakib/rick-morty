@@ -12,7 +12,7 @@ function App() {
   const [pageNumber, setPageNumber] = useState(1)
   const [data, setData] = useState({})
   const [search, setSearch] = useState("")
-  console.log(search)
+  // console.log(search)
 
   const { info, results } = data;
 
