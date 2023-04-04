@@ -6,18 +6,24 @@ import Pagination from './components/Pagination/Pagination.jsx';
 import Search from './components/Search/Search.jsx';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Episodes from './Pages/Episodes.jsx';
+import Location from './Pages/Location.jsx';
+import NoPage from './Pages/NoPage.jsx';
 
 function App() {
 
   const [pageNumber, setPageNumber] = useState(1)
   const [data, setData] = useState({})
   const [search, setSearch] = useState("")
-  // console.log(search)
+  const [status, setStatus] = useState("")
+  const [gender, setGender] = useState("")
+  const [species, setSpecies] = useState("")
 
   const { info, results } = data;
 
 
-  let api = `https://rickandmortyapi.com/api/character/?page=${pageNumber}&name=${search}`
+  let api = `https://rickandmortyapi.com/api/character/?page=${pageNumber}&name=${search}&status=${status}&gender=${gender}&species=${species}`
 
 
 
@@ -35,15 +41,23 @@ function App() {
 
   return (
     <div className="App">
+
+      <BrowserRouter>
+        <Routes>
+            <Route path="/episodes" element={<Episodes />} />
+            <Route path="/location" element={<Location />} />
+            <Route path="*" element={<NoPage />} />
+        </Routes>
+      </BrowserRouter>
+
+
       {/* <h1 className='text-center py-3'>Rick & Morty <span className='text-primary'>Wiki</span></h1> */}
 
-      <Search setSearch={setSearch}/>
+      <Search setSearch={setSearch} />
 
       <div className="container">
         <div className="row">
-          <div className="col-3">
-            <Filter />
-          </div>
+          <Filter setStatus={setStatus} setGender={setGender} setSpecies={setSpecies} setPageNumber={setPageNumber} />
           <div className="col-8">
             <Cards results={results} />
           </div>
