@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Episodes from './Pages/Episodes.jsx';
 import Location from './Pages/Location.jsx';
 import NoPage from './Pages/NoPage.jsx';
+import CardDetails from './components/Cards/CardDetails.jsx';
 
 function App() {
 
@@ -42,13 +43,14 @@ function App() {
   return (
     <div className="App">
 
-      <BrowserRouter>
-        <Routes>
-            <Route path="/episodes" element={<Episodes />} />
-            <Route path="/location" element={<Location />} />
-            <Route path="*" element={<NoPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route path="/:id" element={<CardDetails />} />
+        <Route path="/episodes" element={<Episodes />} />
+        <Route path="/episodes/:id" element={<CardDetails />} />
+        <Route path="/location" element={<Location />} />
+        <Route path="/location/:id" element={<CardDetails />} />
+        <Route path="*" element={<NoPage />} />
+      </Routes>
 
 
       {/* <h1 className='text-center py-3'>Rick & Morty <span className='text-primary'>Wiki</span></h1> */}
@@ -59,7 +61,7 @@ function App() {
         <div className="row">
           <Filter setStatus={setStatus} setGender={setGender} setSpecies={setSpecies} setPageNumber={setPageNumber} />
           <div className="col-8">
-            <Cards results={results} />
+            <Cards page='/' results={results} />
           </div>
         </div>
       </div>

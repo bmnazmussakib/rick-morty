@@ -1,52 +1,65 @@
 import React, { useState } from 'react';
-import InputGroup from '../components/Filter/InputGroup';
 import { useEffect } from 'react';
-import axios from 'axios';
+import Cards from '../components/Cards/Cards';
+import SelectData from '../components/Filter/SelectData';
+
 
 export default function Episodes() {
 
-    const [id, setId] = useState(50)
-    const [info, setinfo] = useState('')
-    const [count, setCount] = useState()
-    const [results, setResults] = useState('')
+    const [id, setId] = useState(1)
+    const [info, setinfo] = useState([])
+    const [results, setResults] = useState([])
+    const { air_date, name, episode, characters } = info;
 
+    // console.log(info)
 
-    let episode_api = `https://rickandmortyapi.com/api/episode`
     let api = `https://rickandmortyapi.com/api/episode/${id}`
 
+    // const getData = async () => {
+    //     await axios.get(api).then(res => setinfo(res.data))
+
+    //     let a = await Promise.all(
+    //         getData.characters?.map(x => {
+    //             return fetch(x).then(res => res.json())
+    //         })
+    //     )
+    // }
+
+
+
     useEffect(() => {
-        axios.get(api)
-            .then(function (response) {
-                let data = response.data
-                setinfo(data);
 
-                data.characters.map((item) => {
-                    setResults(item)
+        (async function () {
+            let data = await fetch(api).then(res => res.json());
+            setinfo(data);
+
+            let a = await Promise.all(
+                data.characters.map(x => {
+                    return fetch(x).then(res => res.json())
                 })
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-    }, [api])
+            )
+            setResults(a)
 
-    useEffect(()=>{
-        axios.get(episode_api)
-            .then(function (response) {
-                let data = response.data
-                setCount(data.info.count);
-            })
-            .catch(function (error) {
-                console.log(error);
-            })
-    },[])
+        })()
+
+
+    }, [api])
 
 
 
 
     return (
         <div>
-            <h1>Episodes</h1>
-            <InputGroup count={count} />
+            <h3>Episode Name : {name}</h3>
+            <h6>Air Data: {air_date}</h6>
+            <div className="row">
+                <div className="col-3">
+                    <SelectData setId={setId} total={51} />
+                </div>
+                <div className="col-8">
+                    <Cards page='/episodes/' results={results}/>
+                </div>
+            </div>
         </div>
     )
 }
